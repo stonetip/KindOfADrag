@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		801B73DD21D48F3A00361D90 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 801B73DC21D48F3A00361D90 /* Launch Screen.storyboard */; };
+		801B73DF21D49EF300361D90 /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801B73DE21D49EF300361D90 /* LineView.swift */; };
 		B05A753219B5EF9600B44BFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05A753119B5EF9600B44BFF /* AppDelegate.swift */; };
 		B05A753419B5EF9600B44BFF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05A753319B5EF9600B44BFF /* ViewController.swift */; };
 		B05A753719B5EF9600B44BFF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B05A753519B5EF9600B44BFF /* Main.storyboard */; };
@@ -26,6 +28,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		801B73DC21D48F3A00361D90 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		801B73DE21D49EF300361D90 /* LineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
 		B05A752C19B5EF9600B44BFF /* KindOfADrag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KindOfADrag.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B05A753019B5EF9600B44BFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B05A753119B5EF9600B44BFF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -36,7 +40,6 @@
 		B05A754319B5EF9600B44BFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B05A754419B5EF9600B44BFF /* KindOfADragTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KindOfADragTests.swift; sourceTree = "<group>"; };
 		B05A754E19B5F04D00B44BFF /* MyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyView.swift; sourceTree = "<group>"; };
-		B05A755019B606A400B44BFF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +63,6 @@
 		B05A752319B5EF9600B44BFF = {
 			isa = PBXGroup;
 			children = (
-				B05A755019B606A400B44BFF /* README.md */,
 				B05A752E19B5EF9600B44BFF /* KindOfADrag */,
 				B05A754119B5EF9600B44BFF /* KindOfADragTests */,
 				B05A752D19B5EF9600B44BFF /* Products */,
@@ -82,9 +84,11 @@
 				B05A753119B5EF9600B44BFF /* AppDelegate.swift */,
 				B05A753319B5EF9600B44BFF /* ViewController.swift */,
 				B05A754E19B5F04D00B44BFF /* MyView.swift */,
+				801B73DE21D49EF300361D90 /* LineView.swift */,
 				B05A753519B5EF9600B44BFF /* Main.storyboard */,
 				B05A753819B5EF9600B44BFF /* Images.xcassets */,
 				B05A752F19B5EF9600B44BFF /* Supporting Files */,
+				801B73DC21D48F3A00361D90 /* Launch Screen.storyboard */,
 			);
 			path = KindOfADrag;
 			sourceTree = "<group>";
@@ -160,12 +164,12 @@
 			attributes = {
 				LastSwiftMigration = 0730;
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Gene De Lisa";
 				TargetAttributes = {
 					B05A752B19B5EF9600B44BFF = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 4UDK2944TW;
+						DevelopmentTeam = Y538M6FTBL;
 						LastSwiftMigration = 0920;
 					};
 					B05A753D19B5EF9600B44BFF = {
@@ -199,6 +203,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				801B73DD21D48F3A00361D90 /* Launch Screen.storyboard in Resources */,
 				B05A753719B5EF9600B44BFF /* Main.storyboard in Resources */,
 				B05A753919B5EF9600B44BFF /* Images.xcassets in Resources */,
 			);
@@ -221,6 +226,7 @@
 				B05A754F19B5F04D00B44BFF /* MyView.swift in Sources */,
 				B05A753419B5EF9600B44BFF /* ViewController.swift in Sources */,
 				B05A753219B5EF9600B44BFF /* AppDelegate.swift in Sources */,
+				801B73DF21D49EF300361D90 /* LineView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,12 +272,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -298,7 +306,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -319,12 +327,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -344,7 +354,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -358,10 +368,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				DEVELOPMENT_TEAM = 4UDK2944TW;
+				DEVELOPMENT_TEAM = Y538M6FTBL;
 				INFOPLIST_FILE = KindOfADrag/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rockhoppertech.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.stonetip.KindOfADrag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
@@ -373,10 +383,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				DEVELOPMENT_TEAM = 4UDK2944TW;
+				DEVELOPMENT_TEAM = Y538M6FTBL;
 				INFOPLIST_FILE = KindOfADrag/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rockhoppertech.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.stonetip.KindOfADrag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;

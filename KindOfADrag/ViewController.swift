@@ -10,35 +10,36 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    /// must be >= 1.0
-    var snapX:CGFloat = 40.0
-    
-    /// must be >= 1.0
-    var snapY:CGFloat = 1.0
-    
-    /// how far to move before dragging
-    var threshold:CGFloat = 0.0
     
     /// the guy we're dragging
-    var selectedView:UIView?
+    var selectedView:MyView?
     
-    /// drag in the Y direction?
-    var shouldDragY = true
-    
-    /// drag in the X direction?
-    var shouldDragX = true
+    var linesView:UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let screenSize: CGRect = UIScreen.main.bounds
+        linesView = UIView(frame: CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height))
+        self.view.addSubview(linesView!)
+        
+        
         var myview = MyView()
         view.addSubview(myview)
-        myview.frame = CGRect(x: 10, y: 40, width: 40, height: 40)
+        myview.frame = CGRect(x: 10, y: 40, width: 48, height: 48)
+        myview.vName = "foo"
         
         myview = MyView()
         view.addSubview(myview)
-        myview.frame = CGRect(x: 60, y: 80, width: 40, height: 40)
+        myview.frame = CGRect(x: 60, y: 80, width: 48, height: 48)
         myview.fillColor = UIColor(red: 1.0, green: 0.5, blue: 1.0, alpha: 1.0).cgColor
+        myview.vName = "bar"
+        
+        myview = MyView()
+        view.addSubview(myview)
+        myview.frame = CGRect(x: 60, y: 80, width: 48, height: 48)
+        myview.fillColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0).cgColor
+        myview.vName = "car"
         
         setupGestures()
     }
@@ -48,50 +49,78 @@ class ViewController: UIViewController {
     }
     
     func setupGestures() {
-        let pan = UIPanGestureRecognizer(target:self, action:#selector(ViewController.pan(_:)))
+        let pan = UIPanGestureRecognizer(target:self, action:#selector(panFunc(_:)))
         pan.maximumNumberOfTouches = 1
         pan.minimumNumberOfTouches = 1
         self.view.addGestureRecognizer(pan)
     }
     
-    @objc func pan(_ rec:UIPanGestureRecognizer) {
+    @objc func panFunc(_ rec:UIPanGestureRecognizer) {
         
-        let p:CGPoint = rec.location(in: self.view)
-        var center:CGPoint = .zero
+        let currentLoc:CGPoint = rec.location(in: self.view)
         
         switch rec.state {
         case .began:
-            print("began")
-            selectedView = view.hitTest(p, with: nil)
+            
+            selectedView = view.hitTest(currentLoc, with: nil) as? MyView
             if selectedView != nil {
                 self.view.bringSubview(toFront: selectedView!)
+                
+                print("began dragging \(selectedView!.vName)")
             }
+            
+//            for subV in self.view.subviews{
+//                if let sv = subV as? MyView{
+//                    print(sv.vName)
+//                    print(sv.center)
+//                }
+//            }
             
         case .changed:
             if let subview = selectedView {
-                center = subview.center
-                let distance = sqrt(pow((center.x - p.x), 2.0) + pow((center.y - p.y), 2.0))
-                print("distance \(distance) threshold \(threshold)")
                 
-                if subview is MyView {
-                    if distance > threshold {
-                        if shouldDragX {
-                            subview.center.x = p.x - (p.x.truncatingRemainder(dividingBy: snapX))
-                        }
-                        if shouldDragY {
-                            subview.center.y = p.y - (p.y.truncatingRemainder(dividingBy: snapY))
-                        }
+                subview.center.x = currentLoc.x
+                
+                subview.center.y = currentLoc.y
+                
+                let otherSubViews = self.view.subviews.filter{ (element) -> Bool in
+                    return element != subview
+                }
+                
+                self.linesView!.layer.sublayers = nil
+                
+                for subV in otherSubViews{
+                    if let sv = subV as? MyView{
+                        print(sv.vName)
+                        print(sv.center)
+                        
+//                        let lv = LineView()
+//                        lv.pt1 = sv.center
+//                        lv.pt2 = subview.center
+//                        lv.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+                        
+                        let path = UIBezierPath()
+                        path.move(to: sv.center)
+                        path.addLine(to: subview.center)
+                        
+                        let layer = CAShapeLayer()
+                        layer.path = path.cgPath
+                        layer.strokeColor = UIColor.red.cgColor
+                        layer.lineWidth = 4.0
+                       
+                        
+                        self.linesView!.layer.addSublayer(layer)
+                        
                     }
                 }
+                
             }
             
         case .ended:
             print("ended")
-            if let subview = selectedView {
-                if subview is MyView {
-                    // do whatever
-                }
-            }
+//            if let subview = selectedView {
+//
+//            }
             selectedView = nil
             
         case .possible:

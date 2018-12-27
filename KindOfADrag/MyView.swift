@@ -10,6 +10,8 @@ import UIKit
 
 class MyView: UIView {
     
+    var vName: String = ""
+    
     var fillColor = UIColor(red: 1.0, green: 0.5, blue: 0.0, alpha: 1.0).cgColor
     
     var boundingBoxColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0).cgColor
@@ -25,7 +27,6 @@ class MyView: UIView {
             
             let viewWidth = self.bounds.width
             let viewHeight = self.bounds.height
-            
             context.setFillColor(fillColor)
             context.fill(CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
             
