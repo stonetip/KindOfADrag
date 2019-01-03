@@ -11,35 +11,43 @@ import UIKit
 class ViewController: UIViewController {
     
     
-    /// the guy we're dragging
-    var selectedView:MyView?
+    /// the object we're dragging
+    var selectedSymbol:SymbolView?
     
-    var linesView:UIView?
+    /// the subview containing lines drawn between the objects
+    var linesView:UIView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let screenSize: CGRect = UIScreen.main.bounds
-        linesView = UIView(frame: CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height))
-        self.view.addSubview(linesView!)
+        linesView = UIView()
+        linesView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        linesView.translatesAutoresizingMaskIntoConstraints = false
+        linesView.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 0.0, alpha: 0.25)
         
+        // add the lines view to the main view
+        view.addSubview(linesView)
         
-        var myview = MyView()
-        view.addSubview(myview)
-        myview.frame = CGRect(x: 10, y: 40, width: 48, height: 48)
-        myview.vName = "foo"
+        // set up its constraints
+        view.addConstraints([
+            NSLayoutConstraint(item: linesView, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0),
+            NSLayoutConstraint(item: linesView, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 1.0, constant: 0)
+            ])
         
-        myview = MyView()
-        view.addSubview(myview)
-        myview.frame = CGRect(x: 60, y: 80, width: 48, height: 48)
-        myview.fillColor = UIColor(red: 1.0, green: 0.5, blue: 1.0, alpha: 1.0).cgColor
-        myview.vName = "bar"
+        /// define a stroke color for all the objects
+        let strokeColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.63)
         
-        myview = MyView()
-        view.addSubview(myview)
-        myview.frame = CGRect(x: 60, y: 80, width: 48, height: 48)
-        myview.fillColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0).cgColor
-        myview.vName = "car"
+        let symbol1 = SymbolView(name: "symbol 1", fill: UIColor(red: 1.0, green: 0.0, blue: 1.0, alpha: 0.25), stroke: strokeColor, size: 48)
+        view.addSubview(symbol1)
+        symbol1.center = CGPoint(x: 100, y: 100)
+        
+        let symbol2 = SymbolView(name: "symbol 2", fill: UIColor(red: 0.0, green: 1.0, blue: 1.0, alpha: 0.25), stroke: strokeColor, size: 48)
+        view.addSubview(symbol2)
+        symbol2.center = CGPoint(x: 300, y: 100)
+        
+        let symbol3 = SymbolView(name: "symbol 3", fill: UIColor(red: 0.0, green: 0.75, blue: 0.0, alpha: 0.25), stroke: strokeColor, size: 48)
+        view.addSubview(symbol3)
+        symbol3.center = CGPoint(x: 200, y: 200)
         
         setupGestures()
     }
@@ -49,88 +57,68 @@ class ViewController: UIViewController {
     }
     
     func setupGestures() {
-        let pan = UIPanGestureRecognizer(target:self, action:#selector(panFunc(_:)))
-        pan.maximumNumberOfTouches = 1
-        pan.minimumNumberOfTouches = 1
-        self.view.addGestureRecognizer(pan)
+        let panGestureRecognizer = UIPanGestureRecognizer(target:self, action:#selector(panFunc(_:)))
+        panGestureRecognizer.maximumNumberOfTouches = 1
+        panGestureRecognizer.minimumNumberOfTouches = 1
+        self.view.addGestureRecognizer(panGestureRecognizer)
     }
     
-    @objc func panFunc(_ rec:UIPanGestureRecognizer) {
+    @objc func panFunc(_ recognizer:UIPanGestureRecognizer) {
         
-        let currentLoc:CGPoint = rec.location(in: self.view)
+        let currentLoc:CGPoint = recognizer.location(in: self.view)
         
-        switch rec.state {
+        switch recognizer.state {
         case .began:
             
-            selectedView = view.hitTest(currentLoc, with: nil) as? MyView
-            if selectedView != nil {
-                self.view.bringSubview(toFront: selectedView!)
-                
-                print("began dragging \(selectedView!.vName)")
-            }
-            
-//            for subV in self.view.subviews{
-//                if let sv = subV as? MyView{
-//                    print(sv.vName)
-//                    print(sv.center)
-//                }
-//            }
+            selectedSymbol = view.hitTest(currentLoc, with: nil) as? SymbolView
+
+            guard selectedSymbol != nil else { return }
+
+            self.view.bringSubview(toFront: selectedSymbol!)
+            print("on valid symbol: \(selectedSymbol!.name)")
             
         case .changed:
-            if let subview = selectedView {
+            guard selectedSymbol != nil else { return }
+            
+            selectedSymbol!.center = currentLoc
+            
+            let otherSymbols = self.view.subviews.filter{ (($0 as? SymbolView) != nil) && $0 != selectedSymbol} as! [SymbolView]
+            
+            // erase any previously rendered lines
+            self.linesView.layer.sublayers = nil
+            
+            for symbol in otherSymbols{
                 
-                subview.center.x = currentLoc.x
+                print(symbol.name)
+                print(symbol.center)
                 
-                subview.center.y = currentLoc.y
                 
-                let otherSubViews = self.view.subviews.filter{ (element) -> Bool in
-                    return element != subview
-                }
+                let path = UIBezierPath()
+                path.move(to: symbol.center)
+                path.addLine(to: selectedSymbol!.center)
                 
-                self.linesView!.layer.sublayers = nil
+                let layer = CAShapeLayer()
+                layer.path = path.cgPath
+                layer.strokeColor = UIColor.red.cgColor
+                layer.opacity = 0.5
+                layer.lineWidth = 4.0
+                layer.lineCap = kCALineCapRound
                 
-                for subV in otherSubViews{
-                    if let sv = subV as? MyView{
-                        print(sv.vName)
-                        print(sv.center)
-                        
-//                        let lv = LineView()
-//                        lv.pt1 = sv.center
-//                        lv.pt2 = subview.center
-//                        lv.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
-                        
-                        let path = UIBezierPath()
-                        path.move(to: sv.center)
-                        path.addLine(to: subview.center)
-                        
-                        let layer = CAShapeLayer()
-                        layer.path = path.cgPath
-                        layer.strokeColor = UIColor.red.cgColor
-                        layer.lineWidth = 4.0
-                       
-                        
-                        self.linesView!.layer.addSublayer(layer)
-                        
-                    }
-                }
-                
+                self.linesView.layer.addSublayer(layer)
             }
             
         case .ended:
             print("ended")
-//            if let subview = selectedView {
-//
-//            }
-            selectedView = nil
+            selectedSymbol = nil
             
         case .possible:
             print("possible")
         case .cancelled:
             print("cancelled")
-            selectedView = nil
+            selectedSymbol = nil
         case .failed:
             print("failed")
-            selectedView = nil
+            selectedSymbol = nil
         }
     }
 }
