@@ -39,15 +39,15 @@ class ViewController: UIViewController {
         
         let symbol1 = SymbolView(name: "symbol 1", fill: UIColor(red: 1.0, green: 0.0, blue: 1.0, alpha: 0.25), stroke: strokeColor, size: 48)
         view.addSubview(symbol1)
-        symbol1.center = CGPoint(x: 100, y: 100)
+        symbol1.center = CGPoint(x: 48, y: 96)
         
         let symbol2 = SymbolView(name: "symbol 2", fill: UIColor(red: 0.0, green: 1.0, blue: 1.0, alpha: 0.25), stroke: strokeColor, size: 48)
         view.addSubview(symbol2)
-        symbol2.center = CGPoint(x: 300, y: 100)
+        symbol2.center = CGPoint(x: 96, y: 192)
         
         let symbol3 = SymbolView(name: "symbol 3", fill: UIColor(red: 0.0, green: 0.75, blue: 0.0, alpha: 0.25), stroke: strokeColor, size: 48)
         view.addSubview(symbol3)
-        symbol3.center = CGPoint(x: 200, y: 200)
+        symbol3.center = CGPoint(x: 144, y: 96)
         
         setupGestures()
     }
@@ -57,52 +57,45 @@ class ViewController: UIViewController {
     }
     
     func setupGestures() {
-        let panGestureRecognizer = UIPanGestureRecognizer(target:self, action:#selector(panFunc(_:)))
+        let panGestureRecognizer = UIPanGestureRecognizer(target:self, action:#selector(dragSymbol(_:)))
         panGestureRecognizer.maximumNumberOfTouches = 1
         panGestureRecognizer.minimumNumberOfTouches = 1
         self.view.addGestureRecognizer(panGestureRecognizer)
     }
     
-    @objc func panFunc(_ recognizer:UIPanGestureRecognizer) {
+    
+    
+    @objc func dragSymbol(_ recognizer:UIPanGestureRecognizer) {
         
         let currentLoc:CGPoint = recognizer.location(in: self.view)
         
         switch recognizer.state {
+            
         case .began:
             
             selectedSymbol = view.hitTest(currentLoc, with: nil) as? SymbolView
-
+            
             guard selectedSymbol != nil else { return }
-
+            
             self.view.bringSubview(toFront: selectedSymbol!)
-            print("on valid symbol: \(selectedSymbol!.name)")
+            print("hit valid symbol: \(selectedSymbol!.name)")
             
         case .changed:
             guard selectedSymbol != nil else { return }
             
             selectedSymbol!.center = currentLoc
             
-            let otherSymbols = self.view.subviews.filter{ (($0 as? SymbolView) != nil) && $0 != selectedSymbol} as! [SymbolView]
             
             // erase any previously rendered lines
             self.linesView.layer.sublayers = nil
             
+            let otherSymbols = self.view.subviews.filter{ (($0 as? SymbolView) != nil) && $0 != selectedSymbol} as! [SymbolView]
+
             for symbol in otherSymbols{
                 
                 print(symbol.name)
-                print(symbol.center)
                 
-                
-                let path = UIBezierPath()
-                path.move(to: symbol.center)
-                path.addLine(to: selectedSymbol!.center)
-                
-                let layer = CAShapeLayer()
-                layer.path = path.cgPath
-                layer.strokeColor = UIColor.red.cgColor
-                layer.opacity = 0.5
-                layer.lineWidth = 4.0
-                layer.lineCap = kCALineCapRound
+                let layer = createLineLayer(symbol.center, selectedSymbol!.center)
                 
                 self.linesView.layer.addSublayer(layer)
             }
@@ -111,15 +104,25 @@ class ViewController: UIViewController {
             print("ended")
             selectedSymbol = nil
             
-        case .possible:
-            print("possible")
-        case .cancelled:
-            print("cancelled")
-            selectedSymbol = nil
-        case .failed:
-            print("failed")
-            selectedSymbol = nil
+        default: break
         }
+    }
+    
+    
+    func createLineLayer(_ startPoint:CGPoint, _ endPoint: CGPoint) -> CAShapeLayer {
+        
+        let path = UIBezierPath()
+        path.move(to: startPoint)
+        path.addLine(to: endPoint)
+        
+        let layer = CAShapeLayer()
+        layer.path = path.cgPath
+        layer.strokeColor = UIColor.red.cgColor
+        layer.opacity = 0.5
+        layer.lineWidth = 4.0
+        layer.lineCap = kCALineCapRound
+        
+        return layer
     }
 }
 
